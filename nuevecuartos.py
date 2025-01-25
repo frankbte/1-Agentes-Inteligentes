@@ -8,7 +8,8 @@ class NueveCuartos(entornos_o.Entorno):
 
     def accion_legal(self, accion):
         return accion in ["ir_derecha", "ir_izquierda", "subir", "bajar", "limpiar", "nada"]
-    def transición(self, accion):
+    
+    def transicion(self, accion):
         if not self.accion_legal(accion):
             raise ValueError(f"La acción {accion} no es legal para el estado {self.x}")
         
@@ -28,7 +29,7 @@ class NueveCuartos(entornos_o.Entorno):
             self.costo += 2
         elif accion == "limpiar":
             index = (piso - 1) * 3 + (cuarto - 1)
-            cuarto[index] = "limpio"
+            cuartos[index] = "limpio"
             self.costo += 0.5
         elif accion == "nada":
             pass
@@ -52,7 +53,7 @@ class AgenteReactivo(entornos_o.Agente):
 
         cuartos = self.modelo[2]
 
-        if all(c == "limpio" for c in self.modelo[2]):
+        if all(c == "limpio" for c in cuartos):
             return "nada"
         elif situacion == "sucio":
             return "limpiar"
@@ -67,6 +68,15 @@ class AgenteReactivo(entornos_o.Agente):
         else:
             return "nada"
         
+def test():
+    x = [1, 1, ["sucio"] * 9]
+
+    print("Prueba del entorno con un agente recativo")
+
+    entornos_o.simulador(NueveCuartos(x), AgenteReactivo(), 100)
+
+if __name__ == "__main__":
+    test()
 
 
 
